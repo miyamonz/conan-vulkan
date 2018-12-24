@@ -3,9 +3,10 @@
 import os
 from conans import ConanFile, CMake, tools, RunEnvironment
 
+
 class VulkanTestConan(ConanFile):
     settings = 'os', 'compiler', 'build_type', 'arch'
-    generators = 'cmake'
+    generators = 'cmake_find_package'
 
     def build(self):
         cmake = CMake(self)
@@ -14,5 +15,4 @@ class VulkanTestConan(ConanFile):
 
     def test(self):
         if not tools.cross_building(self.settings):
-            with tools.environment_append(RunEnvironment(self).vars), tools.chdir('bin'):
-                self.run(f'.{os.sep}test_package')
+            self.run(f'.{os.sep}test_package')

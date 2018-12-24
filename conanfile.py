@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from conans import ConanFile, tools
+from conans.errors import ConanException
+
 
 class VulkanConan(ConanFile):
-    name = 'vulkan'
-    version = '1.1.82.1'
+    name = 'Vulkan'
+    version = '1.1.92.1'
     description = 'The LunarG Vulkan SDK provides the development and runtime components required to build, run, and debug Vulkan applications.'
     url = 'https://github.com/birsoyo/conan-vulkan'
     homepage = 'https://vulkan.lunarg.com/sdk/home'
@@ -22,7 +25,7 @@ class VulkanConan(ConanFile):
     source_subfolder = 'source_subfolder'
     build_subfolder = 'build_subfolder'
 
-    def build(self):
+    def source(self):
         prefix_url = f'https://sdk.lunarg.com/sdk/download/{self.version}'
         win_url = f'{prefix_url}/windows/VulkanSDK-{self.version}-Installer.exe'
         mac_url = f'{prefix_url}/mac/vulkansdk-macos-{self.version}.tar.gz'
@@ -36,6 +39,8 @@ class VulkanConan(ConanFile):
                 url = lin_url
             elif self.settings.os == 'Macos':
                 url = mac_url
+            else:
+                raise ConanException(f"Unsupported platform: {self.settings.os}")
             tools.get(url, keep_permissions=True)
 
     def package(self):
@@ -46,11 +51,20 @@ class VulkanConan(ConanFile):
             inc_folder = os.path.join(location, 'Include')
             if self.settings.arch == 'x86':
                 lib_folder = os.path.join(location, 'Lib32')
+                bin_folder = os.path.join(location, 'Bin32')
             elif self.settings.arch == 'x86_64':
                 lib_folder = os.path.join(location, 'Lib')
+                bin_folder = os.path.join(location, 'Bin')
+            else:
+                raise ConanException(f'Unsupported architecture: {self.settings.arch}')
+        else:
+            inc_folder = f'{self.version}/x86_64/include'
+            lib_folder = f'{self.version}/x86_64/lib'
+            bin_folder = f'{self.version}/x86_64/bin'
 
         self.copy(pattern='*', dst='include', src=inc_folder)
         self.copy(pattern='*', dst='lib', src=lib_folder)
+        self.copy(pattern='*', dst='bin', src=bin_folder)
 
     def package_info(self):
-        self.cpp_info.libs = ['vulkan-1']
+        self.cpp_info.libs = ['vulkan']
