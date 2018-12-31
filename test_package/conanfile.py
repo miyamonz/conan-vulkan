@@ -14,5 +14,7 @@ class VulkanTestConan(ConanFile):
         cmake.build()
 
     def test(self):
-        if not tools.cross_building(self.settings):
-            self.run(f'.{os.sep}test_package')
+        if self.settings.os == 'Windows':
+            self.run('.\\Release\\test_package.exe')
+        else:
+            self.run(f'./test_package')

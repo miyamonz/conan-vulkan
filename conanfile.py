@@ -67,4 +67,7 @@ class VulkanConan(ConanFile):
         self.copy(pattern='*', dst='bin', src=bin_folder)
 
     def package_info(self):
-        self.cpp_info.libs = ['vulkan']
+        if self.settings.os == 'Windows':
+            self.cpp_info.libs = ['vulkan-1']
+        else:
+            self.cpp_info.libs = ['vulkan']
