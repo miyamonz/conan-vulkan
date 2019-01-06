@@ -41,7 +41,7 @@ class VulkanConan(ConanFile):
                 url = mac_url
             else:
                 raise ConanException(f"Unsupported platform: {self.settings.os}")
-            tools.get(url, keep_permissions=True)
+            tools.get(url + "?Human=true", filename=f'vulkansdk-macos-{self.version}.tar.gz', keep_permissions=True)
 
             # https://vulkan.lunarg.com/issue/view/5bfee3d366315165b412a8ee
             # libshaderc_shared.1.dylib missed on 1.1.92.1
