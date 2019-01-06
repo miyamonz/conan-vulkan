@@ -43,6 +43,13 @@ class VulkanConan(ConanFile):
                 raise ConanException(f"Unsupported platform: {self.settings.os}")
             tools.get(url, keep_permissions=True)
 
+            # https://vulkan.lunarg.com/issue/view/5bfee3d366315165b412a8ee
+            # libshaderc_shared.1.dylib missed on 1.1.92.1
+            if self.settings.os == 'Macos':
+                libshaderc_url = "https://vulkan.lunarg.com/issue/file/5bfee3d366315165b412a8ee/upload/1543446619_libshaderc_shared.1.dylib"
+                dst_folder = f'vulkansdk-macos-{self.version}/macOS/lib/'
+                tools.download(libshaderc_url, dst_folder + "libshaderc_shared.1.dylib")
+
     def package(self):
         self.copy(pattern='LICENSE', dst='licenses', src=self.source_subfolder)
 
