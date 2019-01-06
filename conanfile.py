@@ -61,10 +61,12 @@ class VulkanConan(ConanFile):
             inc_folder = f'vulkansdk-macos-{self.version}/macOS/include'
             lib_folder = f'vulkansdk-macos-{self.version}/macOS/lib'
             bin_folder = f'vulkansdk-macos-{self.version}/macOS/bin'
-        else:
+        elif self.settings.os == 'Linux':
             inc_folder = f'{self.version}/x86_64/include'
             lib_folder = f'{self.version}/x86_64/lib'
             bin_folder = f'{self.version}/x86_64/bin'
+        else:
+            raise ConanException(f"Unsupported platform: {self.settings.os}")
 
         self.copy(pattern='*', dst='include', src=inc_folder)
         self.copy(pattern='*', dst='lib', src=lib_folder)
