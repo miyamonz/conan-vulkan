@@ -57,6 +57,10 @@ class VulkanConan(ConanFile):
                 bin_folder = os.path.join(location, 'Bin')
             else:
                 raise ConanException(f'Unsupported architecture: {self.settings.arch}')
+        elif self.settings.os == 'Macos':
+            inc_folder = f'vulkansdk-macos-{self.version}/macOS/include'
+            lib_folder = f'vulkansdk-macos-{self.version}/macOS/lib'
+            bin_folder = f'vulkansdk-macos-{self.version}/macOS/bin'
         else:
             inc_folder = f'{self.version}/x86_64/include'
             lib_folder = f'{self.version}/x86_64/lib'
