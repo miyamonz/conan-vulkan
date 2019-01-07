@@ -68,6 +68,7 @@ class VulkanConan(ConanFile):
             inc_folder = f'vulkansdk-macos-{self.version}/macOS/include'
             lib_folder = f'vulkansdk-macos-{self.version}/macOS/lib'
             bin_folder = f'vulkansdk-macos-{self.version}/macOS/bin'
+            self.copy("*", dst='sdk', src=f'vulkansdk-macos-{self.version}');
         elif self.settings.os == 'Linux':
             inc_folder = f'{self.version}/x86_64/include'
             lib_folder = f'{self.version}/x86_64/lib'
